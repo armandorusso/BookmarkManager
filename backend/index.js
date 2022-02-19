@@ -4,6 +4,7 @@
 import app from "./server.js"
 import mongodb from "mongodb"
 import dotenv from "dotenv"
+import WebsiteUrlDAO from "./dao/websiteurlsDAO.js"
 
 // Load env variables
 dotenv.config()
@@ -21,6 +22,7 @@ MongoClient.connect(
             process.exit(1)
         })
         .then(async client => {
+            await WebsiteUrlDAO.injectDB(client) // Initial reference to the website collection
             app.listen(port, () => {
                 console.log(`listening on port ${port}`)
             }) // Start webserver after all these checks
