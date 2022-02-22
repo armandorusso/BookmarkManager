@@ -1,3 +1,6 @@
+// This file reads the URL, assigns the fields from the URL to variables and
+// passes it to our database functions in order to get or put our data
+
 import WebsiteUrlDAO from "../dao/websiteurlsDAO.js";
 
 export default class WebsitesController
@@ -10,16 +13,22 @@ export default class WebsitesController
 
         let filters = {}
 
-        if(req.query.name)
-            filters.name = req.query.name
+        // Check in the URL if there contains any of these fields. If so,
+        // assign it to filters, and pass it to getWebsites 
+        // which queries our database
+        if(req.query.category)
+            filters.category = req.query.category
         
-        else if(req.query.field)
-            filters.field = req.query.field
+        else if(req.query.topic)
+            filters.topic = req.query.topic
         
         else if(req.query.contents)
             filters.contents = req.query.contents
         
         
+
+        // Query the database using our filters and other fields we just obtained
+        // from the URL
         const { sectionsList, totalNumberofSections } = await WebsiteUrlDAO.getWebsites( {
             filters,
             page,

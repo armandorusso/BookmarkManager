@@ -1,3 +1,7 @@
+// This file is our main Database file
+// Create database functions in here
+
+
 let websites // Stores instance of our DB
 
 export default class WebsiteUrlDAO 
@@ -21,6 +25,7 @@ export default class WebsiteUrlDAO
         }
     }
 
+    // Queries the database using the fields we got from the URL
     static async getWebsites({
         filters = null,
         page = 0,
@@ -29,15 +34,17 @@ export default class WebsiteUrlDAO
         // name = null,
         // field = null,
     } = {}) {
+
+        // Create our query
         let query
 
         if(filters)
         {
-            if("name" in filters)
-                query = {"name": {$eq: filters["name"] } }
+            if("topic" in filters)
+                query = {"topic": {$eq: filters["topic"] } }
 
-            else if("field" in filters)
-                query = {"field": {$eq: filters["name"] } }
+            else if("category" in filters)
+                query = {"category": {$eq: filters["category"] } }
         }
 
         // Query the database
