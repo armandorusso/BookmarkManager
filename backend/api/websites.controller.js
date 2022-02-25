@@ -22,8 +22,8 @@ export default class WebsitesController
         else if(req.query.topic)
             filters.topic = req.query.topic
         
-        else if(req.query.contents)
-            filters.contents = req.query.contents
+        else if(req.query.subject)
+            filters.subject = req.query.subject
         
         
 

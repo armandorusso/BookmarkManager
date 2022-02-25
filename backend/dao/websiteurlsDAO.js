@@ -45,6 +45,9 @@ export default class WebsiteUrlDAO
 
             else if("category" in filters)
                 query = {"category": {$eq: filters["category"] } }
+                
+            else if("subject" in filters)
+                query = {"contents.subject": {$eq: filters["subject"] } }
         }
 
         // Query the database
