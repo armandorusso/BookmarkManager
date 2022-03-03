@@ -1,17 +1,20 @@
 // This file is our main Database file
 // Create database functions in here
-
+import mongodb from "mongodb"
+const ObjectId = mongodb.ObjectId
 
 let websites // Stores instance of our DB
 
+
 export default class WebsiteUrlDAO 
 {   
-    // Connects to our DB. Called when our server starts
+    // **Connects to our DB. Called when our server starts**
     static async injectDB(conn)
     {
         if(websites) // If the reference exists already
             return
         
+        // MongoDB creates an instance for us automatically if it doesn't exist 
         try
         {
             websites = await conn.db(process.env.WEBSITES_NS).collection("WebsiteCollection")
@@ -25,7 +28,9 @@ export default class WebsiteUrlDAO
         }
     }
 
-    // Queries the database using the fields we got from the URL
+    // **Queries the database using the fields we got from the URL**
+
+    // Get Request
     static async getWebsites({
         filters = null,
         page = 0,
@@ -47,7 +52,7 @@ export default class WebsiteUrlDAO
                 query = {"category": {$eq: filters["category"] } }
                 
             else if("subject" in filters)
-                query = {"contents.subject": {$eq: filters["subject"] } }
+                query = {"subject": {$eq: filters["subject"] } }
         }
 
         // Query the database
@@ -84,6 +89,77 @@ export default class WebsiteUrlDAO
             return { secionsList: [], totalNumberofSections: 0}
         }
 
+    }
+
+    // Add object to DB
+    static async addBookmark(bookmarkId, bookmarkInfo, dateAdded, userInfo)
+    {
+        try
+        {
+            const bookmarksAndWebsites = { date: dateAdded,
+                websites: bookmarkInfo.urls,
+                category: bookmarkInfo.category,
+                topic: bookmarkInfo.topic,
+                user_id: userInfo,
+                bookmark_id: ObjectId(bookmarkId),
+            }
+            
+            // Insert into DB
+            return await websites.insertOne(bookmarksAndWebsites)
+        }
+
+        catch(e)
+        {
+            console.error(`Unable to add bookmark to DB: ${e}`)
+
+            return { error: e }
+        }
+
+    }
+
+    // Edit object in DB
+    static async updateBookmark(bookmarkId, userId, bookmarkInfo, dateEdited)
+    {
+
+        try
+        {
+            const updateResponse = await websites.updateOne(
+                { user_id: userId, // Looks for the right user and object ID. This also ensures its the same user who added the bookmark is updating it
+                  _id: ObjectId(bookmarkId) },
+                  { $set: { websites: bookmarkInfo.urls, 
+                    category: bookmarkInfo.category,
+                    topic: bookmarkInfo.topic,
+                    date: dateEdited, 
+                }})
+            
+            return updateResponse
+        }
+
+        catch(e)
+        {
+            console.error(`Unable to update object in the database: ${e}`)
+
+            return { error: e }
+        }
+
+    }
+
+    static async deleteBookmark(bookmarkId, userId)
+    {
+        try
+        {
+            const deleteResponse = await websites.deleteOne( 
+                { _id: ObjectId(bookmarkId), user_id: userId })
+            
+            return deleteResponse
+        }
+
+        catch(e)
+        {
+            console.error(`Unable to delete bookmark (possibly not found): ${e}`)
+
+            return { error: e }
+        }
     }
 
 }
