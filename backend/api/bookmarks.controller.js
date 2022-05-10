@@ -1,7 +1,11 @@
+// This file handles the requests. Returns responses if it succeeded/failed
+// Each function calls the approriate DB functions depending on the request
+
 import WebsiteUrlDAO from "../dao/websiteurlsDAO.js"
 
 export default class BookmarksController
 {
+    // Read post request
     static async apiPostBookmark(req, resp, next)
     {
         try {
@@ -15,8 +19,7 @@ export default class BookmarksController
                 topic: req.body.topic,
                 category: req.body.category,
                 subject: req.body.subject,
-                urls: req.body.url,
-                // pdf: req.body.pdf,
+                urls: req.body.websites,
             }
 
             const dateAdded = new Date()
@@ -28,7 +31,9 @@ export default class BookmarksController
                 userInfo,
             )
 
-            resp.json( { status: "Success!" })
+            resp.json( { status: "Success!",
+                         websites_bookmarks: bookmarkInfo, 
+                         post_response: bookmarkResponse, })
         }
 
         catch(e)
@@ -75,7 +80,8 @@ export default class BookmarksController
                 )
             }
 
-            resp.json({ status: "Success!" })
+            resp.json({ status: "Success!",
+                        edited_website_content: bookmarkInfo })
 
         }
 
@@ -99,7 +105,8 @@ export default class BookmarksController
                 userID,
             )
 
-            resp.json({ status: "Success!" })
+            resp.json({ status: "Success!",
+                        contents: bookmarkResponse })
         }
 
         catch(e)

@@ -8,7 +8,8 @@ import BookmarksController from "./bookmarks.controller.js"
 
 const router = express.Router()
 
-router.route("/").get(WebsitesController.apiGetWebsites) // Get
+router.route("/").get(WebsitesController.apiGetWebsites)
+router.route("/id/:id").get(WebsitesController.apiGetWebsitesById) // Get
 
 router.route("/bookmarks")
     .post(BookmarksController.apiPostBookmark) // Post

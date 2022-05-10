@@ -100,6 +100,7 @@ export default class WebsiteUrlDAO
                 websites: bookmarkInfo.urls,
                 category: bookmarkInfo.category,
                 topic: bookmarkInfo.topic,
+                subject: bookmarkInfo.subject,
                 user_id: userInfo,
                 bookmark_id: ObjectId(bookmarkId),
             }
