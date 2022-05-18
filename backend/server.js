@@ -17,7 +17,7 @@ app.use("/api/v1/websites", websites)
 
 // If someone goes to somewhere where it doesn't exist
 // * is a wild card symbol meaning anything that isn't in our route file
-app.use("*", (req, res) => res.status(404).json({ error: "not found" }))
+app.use("*", (req, res) => res.status(404).json({ error: "Endpoint not found" }))
 
 
 export default app 

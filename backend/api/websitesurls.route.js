@@ -9,7 +9,11 @@ import BookmarksController from "./bookmarks.controller.js"
 const router = express.Router()
 
 router.route("/").get(WebsitesController.apiGetWebsites)
-router.route("/id/:id").get(WebsitesController.apiGetWebsitesById) // Get
+router.route("/id/:id").get(WebsitesController.apiGetWebsitesById)
+router.route("/topic").get(WebsitesController.apiGetWebsiteTopics) // Get
+// possible to get specific topics depending on the category? and vice versa
+// same thing with subjects
+// get it before a specific date
 
 router.route("/bookmarks")
     .post(BookmarksController.apiPostBookmark) // Post

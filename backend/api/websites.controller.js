@@ -47,4 +47,45 @@ export default class WebsitesController
         resp.json(response)
     
     }
+
+    static async apiGetWebsitesById(req, resp, next) 
+    {
+        try 
+        {
+            let id = req.params.id || {}
+
+            let website = await WebsiteUrlDAO.getWebsitesById(id) // Pass response data to the DB
+
+            if(!website) // If it returns nothing
+            {
+                resp.status(404).json( { error: "Website not found"})
+                return
+            }
+
+            resp.json(website)
+        }
+        
+        catch(e)
+        {
+            console.log(`api, ${e}`)
+            resp.status(500).json( {error: e})
+        }
+    }
+
+    static async apiGetWebsiteTopics(req, resp, next)
+    {
+        try
+        {
+            let topics = await WebsiteUrlDAO.getWebsiteTopics()
+
+            resp.json(topics)
+        }
+        
+        catch(e)
+        {
+            console.log(`api, ${e}`)
+            resp.status(500).json( {error: `topic, ${e}`})
+        }
+    }
+
 }

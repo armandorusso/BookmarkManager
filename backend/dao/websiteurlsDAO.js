@@ -91,6 +91,48 @@ export default class WebsiteUrlDAO
 
     }
 
+
+    static async getWebsitesById(bookmarkId)
+    {
+
+        try 
+        {
+            const pipeline = [
+                // Stage 1: Filter the data
+                {
+                    $match: { bookmark_id: new ObjectId(bookmarkId)}
+                }
+            ]
+
+            return await websites.aggregate(pipeline).next();
+        }
+
+        catch(e)
+        {
+            console.error(`Could not obtain the specific website from the database: ${e}`)
+            throw e
+        }
+
+    }
+
+    static async getWebsiteTopics()
+    {
+        let topics = []
+
+        try 
+        {
+            topics = await websites.distinct("topic")
+
+            return topics
+        }
+
+        catch(e)
+        {
+            console.error(`Could not obtain the specific topics from the database: ${e}`)
+            throw e
+        }
+    }
+
     // Add object to DB
     static async addBookmark(bookmarkId, bookmarkInfo, dateAdded, userInfo)
     {
